@@ -6,24 +6,23 @@
 library(plotly)
 library(dplyr)
 
-BuildGraph2 <- function(year2, search = "") {
+BuildGraph2 <- function(search = "") {
   team.stats <- paste0("./data/","2015-16","team.csv")
   dataset <- read.csv(team.stats)
   dataset <- dataset %>% filter(grepl(search, Team))
   x.equation <- paste0("~", "ORtg")
   y.equation <- paste0("~", "DRtg")
   
-  graph <- plot_ly(
-    data=dataset, 
-    x = eval(parse(text = x.equation)), 
-    y = eval(parse(text = y.equation)),
-    color = ~Tm, size = ~W, type = 'scatter',
-    mode = 'markers', hoverinfo = 'text',
-    text = ~paste('Team Name: ', Team,
-            '</br> Offensive Rating: ', ORtg,
-            '</br> Deffensive Rating: ', DRtg,
-            '</br> Wins: ', W)
-  )
+  
+  graph <- ggplot(team.stats, aes(x=ORtg, y=DRtg)) 
+            + geom_point(aes(color=team, size=W, 
+                             text = ~paste('Team Name: ', team,
+                             '</br> Offensive Rating: ', ORtg,
+                             '</br> Deffensive Rating: ', DRtg,
+                             '</br> Wins: ', W))) 
+            + geom_vline(aes(xintercept=mean(ORtg)), color="black") 
+            + geom_hline(aes(yintercept=mean(DRtg)), color="blue")
+
   return (graph)
 }
 

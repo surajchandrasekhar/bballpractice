@@ -1,7 +1,7 @@
 library(shiny)
 library(plotly)
 library(dplyr)
-
+library(ggplot2)
 source('./scripts/graph1.R')
 source('./scripts/graph2.R')
 source('./scripts/graph3.R')
@@ -14,16 +14,13 @@ advanced.stats <- read.csv(advanced)
 team.stats <- read.csv(team)
 player.joined <- left_join(player.stats,advanced.stats, by=c("Player","Tm"))
 dataset <- left_join(player.joined,team.stats, by="Tm")
-newdata <- filter(dataset, G.x > 41) %>% 
-  group_by(Tm) %>% 
-  filter(PS.G == max(PS.G))
 
 # Start shinyServer
 shinyServer(function(input, output) { 
   
   # Render a plotly object that returns your map
   output$scatter1 <- renderPlot({
-    ggplot(newdata,aes(x=PS.G, y=eval(parse(text = input$statvar)))) + geom_point(aes(color=Team, size=W)) + geom_vline(aes(xintercept=mean(PS.G)), color="black") + geom_hline(aes(yintercept=mean(FG.), color="blue"))
+    return(BuildGraph1(input$statvar))
   }) 
 
   output$text1 <- renderText({
@@ -34,7 +31,7 @@ shinyServer(function(input, output) {
     xy_str(input$plot_hover)
   })
   output$scatter2 <- renderPlot({
-    ggplot(team.stats, aes(x=ORtg, y=DRtg)) + geom_point(aes(color=Team, size=W)) + geom_vline(aes(xintercept=mean(ORtg)), color="black") + geom_hline(aes(yintercept=mean(DRtg)), color="blue")
+    return(BuildGraph2(input$search))
   })
   
   output$scatter3 <- renderPlot({
