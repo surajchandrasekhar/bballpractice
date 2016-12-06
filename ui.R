@@ -38,7 +38,7 @@ shinyUI(navbarPage('NBA Statistics',
                               # Main panel: display plotly map
                               mainPanel(
                                 plotOutput('scatter1'),
-                                verbatimTextOutput('hover_info')
+                                verbatimTextOutput('text1')
                               )
                             )
                    ),
@@ -68,7 +68,7 @@ shinyUI(navbarPage('NBA Statistics',
                               
                               # Main panel: display plotly map
                               mainPanel(
-                                plotlyOutput('scatter2')
+                                plotOutput('scatter2')
                               )
                             )
                    ),
@@ -112,7 +112,7 @@ shinyUI(navbarPage('NBA Statistics',
                               
                               # Create a main panel, in which you should display your plotly Scatter plot
                               mainPanel(
-                                plotlyOutput('scatter3')
+                                plotOutput('scatter3')
                               )
                             )
                    )
